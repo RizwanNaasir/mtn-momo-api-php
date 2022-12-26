@@ -1,12 +1,12 @@
 <?php
 
-namespace PatricPoba\MtnMomo\Tests;
+namespace RizwanNasir\MtnMomo\Tests;
    
 use Orchestra\Testbench\TestCase;
-use PatricPoba\MtnMomo\MtnCollection;
-use PatricPoba\MtnMomo\MtnRemittance;
-use PatricPoba\MtnMomo\MtnDisbursement; 
-use PatricPoba\MtnMomo\MtnMomoServiceProvider;
+use RizwanNasir\MtnMomo\MtnCollection;
+use RizwanNasir\MtnMomo\MtnDisbursement;
+use RizwanNasir\MtnMomo\MtnMomoServiceProvider;
+use RizwanNasir\MtnMomo\MtnRemittance;
 
 class LaravelMtnMomoTest extends TestCase
 {

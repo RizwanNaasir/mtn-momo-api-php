@@ -1,3 +1,8 @@
+# Important Note!
+While this package is fork of patricpoba/mtn-momo-api-php all the rights goto the original author
+This Repo is just here to work with the latest version of PHP which is 8.2.
+
+
 # MTN MoMo API
 
 
@@ -14,7 +19,7 @@ This package helps you integrate the [MTN MOMO API](https://momodeveloper.mtn.co
 You are required to have PHP 7.0 or later. You can install the package via composer:
 
 ```bash
-composer require patricpoba/mtn-momo-api-php
+composer require rizwannasir/mtn-momo-api-php
 ```
 
 # Usage
@@ -28,7 +33,7 @@ We need to get the `User ID` and `User Secret` and to do this we shall need to u
 
 ```bash
 ## On the command line, at the root of your project, run 
-$ php ./vendor/patricpoba/mtn-momo-api-php/src/SandboxUserProvision.php -k '9cc70894a5d24dba8a8a50fcecbc0568' -c 'https://yourdomain.com' 
+$ php ./vendor/rizwannasir/mtn-momo-api-php/src/SandboxUserProvision.php -k '9cc70894a5d24dba8a8a50fcecbc0568' -c 'https://yourdomain.com' 
 ```
 
 The option `c` is your callback host and the option `k` is the primary key or `Ocp-Apim-Subscription-Key` for the specific product to which you are subscribed. The `API Key` is unique to the product and you will need an `API Key` for each product you use. You should get a response similar to the following:
@@ -47,11 +52,9 @@ Callback host            : https://yourdomain.com
 We have to setup up the package to utilise the our momodeveloper credentials by creating an instance of the `MtnConfig`
 and pass it to the constructor of the class of the product (collection, disbursement or remittance) we want to use as 
 demonstrated below. The configuration can be overriden a product instance by calling the  `->setConfig($config)` method and passing the new config instance.
- 
-
 
 ```php
-use PatricPoba\MtnMomo\MtnConfig;
+use RizwanNasir\MtnMomo\MtnConfig;
 
  
 $config = new MtnConfig([ 
@@ -85,9 +88,8 @@ Collections is used for requesting a payment from a customer (Payer) and checkin
 * `collectionUserId`    : For development environment, use the sandbox credentials else use the one on the `developer portal`.
 * `collectionApiSecret` : For development environment, use the sandbox credentials else use the one on the `developer portal`.
 
-
 ```php
-use PatricPoba\MtnMomo\MtnConfig;
+use RizwanNasir\MtnMomo\MtnConfig;
 
  
 $config = new MtnConfig([ 
@@ -159,8 +161,8 @@ Disbursement is used for transferring money from the provider account to a custo
 
 
 ```php 
-use PatricPoba\MtnMomo\MtnConfig;
-use PatricPoba\MtnMomo\MtnDisbursement;
+use RizwanNasir\MtnMomo\MtnConfig;
+use RizwanNasir\MtnMomo\MtnDisbursement;
 
  
 $config = new MtnConfig([ 
@@ -238,8 +240,8 @@ Transfer operation is used to transfer an amount from the own account to a payee
   
  
 ```php 
-use PatricPoba\MtnMomo\MtnConfig;
-use PatricPoba\MtnMomo\MtnRemittance;
+use RizwanNasir\MtnMomo\MtnConfig;
+use RizwanNasir\MtnMomo\MtnRemittance;
 
  
 $config = new MtnConfig([ 
@@ -297,7 +299,7 @@ $transaction = $disbursement->accountHolderActive($mobileNumber);
  
 ### Api Responses
 
-All api calls return the PatricPoba\MtnMomo\Http\ApiResponse object which is described below:
+All api calls return the RizwanNasir\MtnMomo\Http\ApiResponse object which is described below:
 
 ``` bash
 /**

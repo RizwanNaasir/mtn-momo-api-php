@@ -1,11 +1,9 @@
 <?php
 
-namespace PatricPoba\MtnMomo;
+namespace RizwanNasir\MtnMomo;
 
-use PatricPoba\MtnMomo\MtnCollection;
-use PatricPoba\MtnMomo\MtnRemittance;
 use Illuminate\Support\ServiceProvider;
-use PatricPoba\MtnMomo\MtnDisbursement;
+use RizwanNasir\MtnMomo\MtnRemittance;
 
 class MtnMomoServiceProvider extends ServiceProvider
 {

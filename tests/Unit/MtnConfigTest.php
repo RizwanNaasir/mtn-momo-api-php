@@ -1,11 +1,11 @@
 <?php
 
-namespace Patricpoba\MtnMomo\Tests\Unit;
+namespace RizwanNasir\MtnMomo\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use PatricPoba\MtnMomo\MtnConfig; 
-use PatricPoba\MtnMomo\Exceptions\MtnConfigException;
-use PatricPoba\MtnMomo\Exceptions\WrongProductException;
+use RizwanNasir\MtnMomo\Exceptions\MtnConfigException;
+use RizwanNasir\MtnMomo\Exceptions\WrongProductException;
+use RizwanNasir\MtnMomo\MtnConfig;
 
 class MtnConfigTest extends TestCase
 {

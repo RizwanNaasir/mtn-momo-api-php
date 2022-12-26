@@ -1,46 +1,37 @@
 <?php
 
-namespace PatricPoba\MtnMomo;
+namespace RizwanNasir\MtnMomo;
 
-use PatricPoba\MtnMomo\Exceptions\MtnMomoException;
+use RizwanNasir\MtnMomo\Exceptions\MtnConfigException;
+use RizwanNasir\MtnMomo\Exceptions\MtnMomoException;
 
 class MtnDisbursement extends MtnMomo 
 {
     const PRODUCT = 'disbursement';
 
 
+    /**
+     * @throws MtnMomoException
+     */
     protected function requestUrl(string $endpointName, array $params = []) : string
-    { 
-        switch ($endpointName) {
-            case 'token':  
-                $urlSegment = '/disbursement/token/' ; // trailing slash mandatory
-                break;
-
-            case 'createTransaction': 
-                $urlSegment = '/disbursement/v1_0/transfer';
-                break;
-                 
-            case 'getTransaction': 
-                $urlSegment = "/disbursement/v1_0/transfer/{$params['referenceId']}";
-                break;
- 
-            case 'balance': 
-                $urlSegment = '/disbursement/v1_0/account/balance';
-                break;
- 
-            case 'accountholder': 
-                $urlSegment = "/disbursement/v1_0/accountholder/MSISDN/{$params['accountHolderId']}/active";
-                break;
-            
-            default:
-                throw new MtnMomoException("Unknown api endpoint - {$endpointName}.");
-                break;
-        }
+    {
+        $urlSegment = match ($endpointName) {
+            'token' => '/disbursement/token/',
+            'createTransaction' => '/disbursement/v1_0/transfer',
+            'getTransaction' => "/disbursement/v1_0/transfer/{$params['referenceId']}",
+            'balance' => '/disbursement/v1_0/account/balance',
+            'accountholder' => "/disbursement/v1_0/accountholder/MSISDN/{$params['accountHolderId']}/active",
+            default => throw new MtnMomoException("Unknown api endpoint - {$endpointName}."),
+        };
  
         return $this->config->baseUrl . $urlSegment;
     }
 
-    public function transfer(array $params, string $transactionUuid = null)
+    /**
+     * @throws MtnMomoException
+     * @throws MtnConfigException
+     */
+    public function transfer(array $params, string $transactionUuid = null): string|Http\ApiResponse
     {
         return parent::createTransaction($params, $transactionUuid);
     }

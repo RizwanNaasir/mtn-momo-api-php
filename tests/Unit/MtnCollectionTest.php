@@ -1,13 +1,13 @@
 <?php
 
-namespace Patricpoba\MtnMomo\Tests\Unit;
+namespace RizwanNasir\MtnMomo\Tests\Unit;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response; 
-use PHPUnit\Framework\TestCase;
-use PatricPoba\MtnMomo\MtnConfig;
 use GuzzleHttp\Handler\MockHandler;
-use PatricPoba\MtnMomo\MtnCollection;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use RizwanNasir\MtnMomo\MtnCollection;
+use RizwanNasir\MtnMomo\MtnConfig;
 
 class MtnCollectionTest extends TestCase 
 {

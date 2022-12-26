@@ -1,12 +1,13 @@
 <?php
 
-namespace PatricPoba\MtnMomo;
- 
-use PatricPoba\MtnMomo\Exceptions\MtnConfigException;
-use PatricPoba\MtnMomo\Exceptions\WrongProductException;
-use PatricPoba\MtnMomo\Utilities\AttributesMassAssignable;
+namespace RizwanNasir\MtnMomo;
 
-class MtnConfig 
+use Exception;
+use RizwanNasir\MtnMomo\Exceptions\MtnConfigException;
+use RizwanNasir\MtnMomo\Exceptions\WrongProductException;
+use RizwanNasir\MtnMomo\Utilities\AttributesMassAssignable;
+
+class MtnConfig
 {
     use AttributesMassAssignable;
 
@@ -14,17 +15,17 @@ class MtnConfig
      * @var string target environment
      */
     public $baseUrl;
- 
+
     /**
      * @var string the currency of http calls
      */
     public $targetEnvironment;
- 
+
     /**
      * @var string The MTN OpenApi currency
      */
     public $currency;
- 
+
     /**
      * @var string The MTN product suscribed to.
      * collection|disbursement|remittance
@@ -38,7 +39,7 @@ class MtnConfig
      *  - API Secret.
      *  - Primary Key
      *  - User Id
-     *  - callback Url : can be overriden by a url set in the params array 
+     *  - callback Url : can be overriden by a url set in the params array
      */
     public $collectionApiSecret;
 
@@ -47,14 +48,14 @@ class MtnConfig
     public $collectionUserId;
 
     public $collectionCallbackUrl;
-     
+
 
     /**
-     * @var string The MTN OpenApi remittance credentials 
+     * @var string The MTN OpenApi remittance credentials
      *  - API Secret.
      *  - Primary Key
      *  - User Id
-     *  - callback Url : can be overriden by a url set in the params array 
+     *  - callback Url : can be overriden by a url set in the params array
      */
     public $remittanceApiSecret;
 
@@ -63,19 +64,19 @@ class MtnConfig
     public $remittanceUserId;
 
     public $remittanceCallbackUrl;
- 
+
 
     /**
      * @var string The MTN OpenApi disbursements primary Key
      *  - API Secret.
      *  - Primary Key
      *  - User Id
-     *  - callback Url : can be overriden by a url set in the params array 
+     *  - callback Url : can be overriden by a url set in the params array
      */
     public $disbursementApiSecret;
- 
+
     public $disbursementPrimaryKey;
- 
+
     public $disbursementUserId;
 
     public $disbursementCallbackUrl;
@@ -92,31 +93,31 @@ class MtnConfig
     }
 
     /**
-     * Checck if all credentials are filled for the necessary
-     * product 
+     * Check if all credentials are filled for the necessary
+     * product
      *
      * @param string $product disbursement | remittance | collection
-     * @throws \Exception
-     * @return void
-     */ 
-    public function validate($product)
-    { 
+     * @return MtnConfig
+     *@throws Exception
+     */
+    public function validate(string $product): static
+    {
         if (! in_array($product, static::PRODUCTS) ) {
             throw new WrongProductException("Wrong product chosen. product must be " . implode(' or ', static::PRODUCTS));
         }
 
         $missingCredentials = [];
-         
+
         foreach ($this->requiredConfigs($product) as $config) {
-           
+
             if (is_null($this->{$config}) ) {
                 $missingCredentials[] = $config ;
             }
         }
 
         if( ! empty($missingCredentials)){
-            throw new MtnConfigException("The followig credentials are missing: " . implode(', ', $missingCredentials) ); 
-        } 
+            throw new MtnConfigException("The following credentials are missing: " . implode(', ', $missingCredentials) );
+        }
 
         return $this;
     }
@@ -124,30 +125,31 @@ class MtnConfig
     /**
      * Get set of configs required according to the product being used.
      *
-     * @param string $product disbursement | remittance | collection 
+     * @param string $product disbursement | remittance | collection
      * @return array
      */
-    protected function requiredConfigs($product)
-    { 
-        return [ 
-            'baseUrl', 
-            'currency', 
-            'targetEnvironment', 
-            $product . 'ApiSecret', 
-            $product . 'PrimaryKey', 
+    protected function requiredConfigs(string $product): array
+    {
+        return [
+            'baseUrl',
+            'currency',
+            'targetEnvironment',
+            $product . 'ApiSecret',
+            $product . 'PrimaryKey',
             $product . 'UserId'
         ];
     }
 
     /**
-     * Get specific config dynamicsally
+     * Get specific config dynamically
      *
      * @param string $product 'collection'|'disbursement'|'remittance'
      * @param string $configKey 'primaryKey' | 'ApiSecret' | 'UserId'
-     * $throws PatricPoba\MtnMomo\Exceptions\MtnConfigException\MtnConfigException
-     * @return string
+     * @param bool $throwExceptionIfNull
+     * @return string|null
+     * @throws MtnConfigException
      */
-    public function getValue($product, $configKey, $throwExceptionIfNull = false)
+    public function getValue(string $product, string $configKey, bool $throwExceptionIfNull = false): ?string
     {
         // if $product = 'collection' and $configKey= 'primaryKey', $configKey = 'collectionPrimaryKey' 
         $configKey = strtolower($product) . ucfirst($configKey);

@@ -1,12 +1,14 @@
 <?php
 
-namespace PatricPoba\MtnMomo;
+namespace RizwanNasir\MtnMomo;
   
+use Exception;
 use GuzzleHttp\ClientInterface;
-use PatricPoba\MtnMomo\MtnConfig;
-use PatricPoba\MtnMomo\Http\GuzzleClient;
-use PatricPoba\MtnMomo\Utilities\Helpers;
-use PatricPoba\MtnMomo\Exceptions\MtnMomoException;
+use RizwanNasir\MtnMomo\Exceptions\MtnConfigException;
+use RizwanNasir\MtnMomo\Exceptions\MtnMomoException;
+use RizwanNasir\MtnMomo\Http\ApiResponse;
+use RizwanNasir\MtnMomo\Http\GuzzleClient;
+use RizwanNasir\MtnMomo\Utilities\Helpers;
 
 abstract class MtnMomo extends GuzzleClient
 {
@@ -17,8 +19,6 @@ abstract class MtnMomo extends GuzzleClient
      */ 
     const VERSION = '1.0';
 
-    protected $config;
- 
     /**
      * Current product, would be overriden by the child classes
      * Example: 'collection', 'disbursement', 'remittance'
@@ -26,7 +26,7 @@ abstract class MtnMomo extends GuzzleClient
     const PRODUCT = null; 
  
 
-    public function __construct(MtnConfig $config, ClientInterface $client = null)
+    public function __construct(protected MtnConfig $config, ClientInterface $client = null)
     { 
         parent::__construct($client);
  
@@ -41,7 +41,7 @@ abstract class MtnMomo extends GuzzleClient
         return $this;
     }
 
-    public function getConfig()
+    public function getConfig(): MtnConfig
     {
         return $this->config;
     }
@@ -49,6 +49,7 @@ abstract class MtnMomo extends GuzzleClient
     /**
      * Get the auth token
      * @return string The OAuth Token.
+     * @throws Exception
      */
     public function getToken() : string
     {  
@@ -76,7 +77,11 @@ abstract class MtnMomo extends GuzzleClient
     }
 
 
-    public function getBalance()
+    /**
+     * @throws MtnConfigException
+     * @throws MtnMomoException
+     */
+    public function getBalance(): Http\ApiResponse
     {  
         $headers = [
             'Authorization'             => 'Bearer ' . $this->getToken() ,
@@ -89,7 +94,11 @@ abstract class MtnMomo extends GuzzleClient
     }
 
 
-    public function getTransaction(string $transactionId)
+    /**
+     * @throws MtnConfigException
+     * @throws MtnMomoException
+     */
+    public function getTransaction(string $transactionId): Http\ApiResponse
     {
         $headers = [
             'Authorization'             => 'Bearer ' . $this->getToken() ,
@@ -102,16 +111,17 @@ abstract class MtnMomo extends GuzzleClient
 
         return $this->request('get', $url, $params = [], $headers);
     }
- 
+
     /**
      * Make a requestToPay (collection product) or transfer (disbursement product) or transfer (remittance product)
      *
-     * @param array $params amount, mobileNumber,payeeNote,payerMessage,externalId, callbackUrl*
-     * @param string $transactionUuid
-     * @throws \Exception
-     * @return mixed string | PatricPoba\MtnMomo\Http\ApiReponse
+     * @param array $data
+     * @param string|null $transactionUuid
+     * @return string|ApiResponse string | PatricPoba\MtnMomo\Http\ApiReponse
+     * @throws MtnConfigException
+     * @throws MtnMomoException
      */
-    public function createTransaction(array $data, string $transactionUuid = null)
+    public function createTransaction(array $data, string $transactionUuid = null): string|ApiResponse
     {
         $params = [
             "amount"            => $data['amount'],
@@ -149,14 +159,15 @@ abstract class MtnMomo extends GuzzleClient
  
         return $response->isSuccess() ? $transactionUuid : $response;
     }
- 
+
     /**
      * Undocumented function
      *
      * @param [type] $mobileNumber
-     * @return void
+     * @return ApiResponse
+     * @throws MtnMomoException
      */
-    public function accountHolderActive($mobileNumber)
+    public function accountHolderActive($mobileNumber): ApiResponse
     {
         $headers = [
             'Authorization'             => 'Bearer ' . $this->getToken() ,

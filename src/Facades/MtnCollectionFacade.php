@@ -1,6 +1,6 @@
 <?php
 
-namespace PatricPoba\MtnMomo\Facades;
+namespace RizwanNasir\MtnMomo\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -12,7 +12,7 @@ class MtnCollectionFacade extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return 'mtn-momo-collection';
     }

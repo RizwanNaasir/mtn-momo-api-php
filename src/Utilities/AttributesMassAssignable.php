@@ -1,7 +1,7 @@
 <?php
  
 
-namespace PatricPoba\MtnMomo\Utilities;
+namespace RizwanNasir\MtnMomo\Utilities;
 
 /**
  * MassAssignable Trait
@@ -14,19 +14,19 @@ trait AttributesMassAssignable
 {
     /**
      * This method is used to mass assign the properties required in a class.
-     *  
+     *
      * It loops through the fields marked as required and optional
      * and then assisngs values to those fields using accessors
      * available in the class for those required options.
      *
-     * @param   array $data
+     * @param array|null $data
+     * @return  static
      * @example [
      *              'walletId' => 'some-existing-walletId',
      *              'transactionId' => 'someExistingTransactionId'
      *          ]
-     * @return  static
      */
-    protected function massAssignAttributes($data = [])
+    protected function massAssignAttributes(?array $data = []): static
     {
         if ( ! is_array($data)) {
             return $this;

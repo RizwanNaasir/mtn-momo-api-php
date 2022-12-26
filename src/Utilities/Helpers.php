@@ -1,6 +1,6 @@
 <?php
  
-namespace PatricPoba\MtnMomo\Utilities;
+namespace RizwanNasir\MtnMomo\Utilities;
  
 trait Helpers
 {

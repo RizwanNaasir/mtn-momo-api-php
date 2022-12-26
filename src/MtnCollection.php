@@ -1,41 +1,27 @@
 <?php
 
-namespace PatricPoba\MtnMomo;
+namespace RizwanNasir\MtnMomo;
 
-use PatricPoba\MtnMomo\Exceptions\MtnMomoException;
+use RizwanNasir\MtnMomo\Exceptions\MtnMomoException;
 
-class MtnCollection extends MtnMomo 
+class MtnCollection extends MtnMomo
 {
     const PRODUCT = 'collection';
- 
 
+
+    /**
+     * @throws MtnMomoException
+     */
     protected function requestUrl(string $endpointName, array $params = []) : string
-    { 
-        switch ($endpointName) {
-            case 'token':  
-                $urlSegment = '/collection/token/' ; // trailing slash mandatory
-                break;
-
-            case 'createTransaction': 
-                $urlSegment = '/collection/v1_0/requesttopay';
-                break;
-                 
-            case 'getTransaction': 
-                $urlSegment = "/collection/v1_0/requesttopay/{$params['referenceId']}";
-                break;
- 
-            case 'balance': 
-                $urlSegment = '/collection/v1_0/account/balance';
-                break;
- 
-            case 'accountholderActive': 
-                $urlSegment = "/collection/v1_0/accountholder/MSISDN/{$params['accountHolderId']}/active";
-                break;
-            
-            default:
-                throw new MtnMomoException("Unknown Api endpoint - {$endpointName}.");
-                break;
-        }
+    {
+        $urlSegment = match ($endpointName) {
+            'token' => '/collection/token/',
+            'createTransaction' => '/collection/v1_0/requesttopay',
+            'getTransaction' => "/collection/v1_0/requesttopay/{$params['referenceId']}",
+            'balance' => '/collection/v1_0/account/balance',
+            'accountholderActive' => "/collection/v1_0/accountholder/MSISDN/{$params['accountHolderId']}/active",
+            default => throw new MtnMomoException("Unknown Api endpoint - {$endpointName}."),
+        };
  
         return $this->config->baseUrl . $urlSegment;
     }

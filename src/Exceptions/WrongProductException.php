@@ -1,6 +1,6 @@
 <?php
 
-namespace PatricPoba\MtnMomo\Exceptions;
+namespace RizwanNasir\MtnMomo\Exceptions;
 
 class WrongProductException extends MtnMomoException 
 {

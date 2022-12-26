@@ -1,13 +1,14 @@
 #!/usr/bin/php
 <?php
-namespace PatricPoba\MtnMomo;
+namespace RizwanNasir\MtnMomo;
 
 require_once 'vendor/autoload.php';
 
-use PatricPoba\MtnMomo\Http\GuzzleClient;
-use PatricPoba\MtnMomo\Utilities\Helpers;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Str;
+use RizwanNasir\MtnMomo\Http\GuzzleClient;
+use RizwanNasir\MtnMomo\Utilities\Helpers;
 
-  
 class SandboxUserProvision
 {
     use Helpers;
@@ -41,16 +42,16 @@ class SandboxUserProvision
 
 
     public function provisionSandboxUser( $primaryKey = null, $providerCallbackHost = null, $xReferenceId = null)
-    { 
+    {
         list($xReferenceId, $primaryKey, $providerCallbackHost) = $this->validateInput($primaryKey, $providerCallbackHost, $xReferenceId);
 
         $headers = [
             'X-Reference-Id'            => $xReferenceId,
             'Content-Type'              => 'application/json',
-            'Ocp-Apim-Subscription-Key' => $primaryKey,
+            'Ocp-Apim-Subscription-Key' => Str::replace("'",'',$primaryKey),
         ];
         $params = [ 'providerCallbackHost' => $providerCallbackHost ];
-   
+
         try {
             // Create a sandbox user
             $response = (new GuzzleClient())
@@ -74,9 +75,8 @@ class SandboxUserProvision
             echo "ApiKey (ApiSecret)       : {$response->apiKey} \n" ;  
             echo "Callback host            : {$providerCallbackHost} \n" ; 
 
-        } catch (\Exception $exception) { 
-            throw $exception; 
-        } 
+        } catch (GuzzleException|Exceptions\MtnMomoException $e) {
+        }
     }
 
 }
